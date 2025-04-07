@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Classificador de Cidades</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f0f2f5;
+      padding: 30px;
+    }
+
+    h1 {
+      color: #333;
+    }
+
+    label {
+      display: block;
+      margin-top: 10px;
+      margin-bottom: 5px;
+    }
+
+    input {
+      padding: 8px;
+      margin-bottom: 10px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      width: 100%;
+      max-width: 300px;
+    }
+
+    button {
+      padding: 10px 15px;
+      border: none;
+      border-radius: 5px;
+      background-color: #4CAF50;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    #resultado {
+      margin-top: 20px;
+    }
+
+    .cidade {
+      background-color: #fff;
+      padding: 10px;
+      margin-bottom: 8px;
+      border-radius: 5px;
+      border-left: 5px solid #4CAF50;
+    }
+
+    .cidade.pequena {
+      border-left-color: #f44336;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Classificador de Cidades</h1>
+
+  <label for="parametro">Parâmetro de população:</label>
+  <input type="number" id="parametro" placeholder="Ex: 350000">
+
+  <h2>Adicionar nova cidade</h2>
+  <label for="nome">Nome da cidade:</label>
+  <input type="text" id="nome" placeholder="Ex: Marília">
+
+  <label for="populacao">População:</label>
+  <input type="number" id="populacao" placeholder="Ex: 240000">
+
+  <button onclick="adicionarCidade()">Adicionar Cidade</button>
+  <button onclick="classificar()">Classificar Cidades</button>
+
+  <div id="resultado"></div>
+
+  <script>
+    const cidades = [
+      { nome: "São Paulo", populacao: 1000000 },
+      { nome: "Birigui", populacao: 100000 },
+      { nome: "Bilac", populacao: 9000 }
+    ];
+
+    function adicionarCidade() {
+      const nome = document.getElementById("nome").value.trim();
+      const populacao = parseInt(document.getElementById("populacao").value);
+
+      if (!nome || isNaN(populacao) || populacao < 0) {
+        alert("Por favor, preencha os campos corretamente.");
+        return;
+      }
+
+      cidades.push({ nome, populacao });
+      alert(`Cidade "${nome}" adicionada com sucesso!`);
+      document.getElementById("nome").value = "";
+      document.getElementById("populacao").value = "";
+    }
+
+    function classificarCidade(cidade, parametro) {
+      const tipo = cidade.populacao > parametro ? "grande" : "pequena";
+      const classe = tipo === "grande" ? "" : "pequena";
+      return `<div class="cidade ${classe}">${cidade.nome}: É uma cidade ${tipo}</div>`;
+    }
+
+    function classificar() {
+      const parametro = parseInt(document.getElementById("parametro").value);
+      const resultadoDiv = document.getElementById("resultado");
+
+      if (isNaN(parametro)) {
+        resultadoDiv.innerHTML = "<p>Digite um valor numérico válido para o parâmetro.</p>";
+        return;
+      }
+
+      const resultadosHTML = cidades.map(cidade => classificarCidade(cidade, parametro)).join("");
+      resultadoDiv.innerHTML = resultadosHTML;
+    }
+  </script>
+
+</body>
+</html>
